@@ -24,96 +24,126 @@ namespace postapi.Controllers
         }
         [Route("GetPosts")]
         [HttpGet]
-        public JsonResult GetPosts()
+        public IActionResult GetPosts()
         {
-            string query = @"
+            DataTable table = new DataTable();
+            try
+            {
+                string query = @"
              select  PostID,PostTittle,DescriptionOfPost, CreatedDate, UpdatedDate,LikesCount, HeartCount
             from
             dbo.Post
             ";
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                
+                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
+                SqlDataReader myReader;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
                 {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
+                    myCon.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myCon.Close();
+                    }
                 }
-            }
 
-            return new JsonResult(table);
+               
+            }
+            catch(Exception)
+            {
+                return BadRequest();
+            }
+            return Ok(table);
         }
         [Route("CreatePost")]
         [HttpPost]
-        public JsonResult CreatePost(Post p1)
+        public IActionResult CreatePost(Post p1)
         {
-            string query = @"
+            try
+            {
+
+
+                string query = @"
                            insert into dbo.Post
                            values (@PostTittle,@DescriptionOfPost, @CreatedDate, @UpdatedDate,@LikesCount,@HeartCount)
                             ";
 
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                DataTable table = new DataTable();
+                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
+                SqlDataReader myReader;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
                 {
+                    myCon.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
 
-                    myCommand.Parameters.AddWithValue("@PostTittle", p1.PostTittle);
-                    myCommand.Parameters.AddWithValue("@DescriptionOfPost", p1.DescriptionOfPost);
-                    myCommand.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
-                    myCommand.Parameters.AddWithValue("@UpdatedDate", DateTime.Now);
-                    myCommand.Parameters.AddWithValue("@LikesCount", 0);
-                    myCommand.Parameters.AddWithValue("@HeartCount", 0);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
+                        myCommand.Parameters.AddWithValue("@PostTittle", p1.PostTittle);
+                        myCommand.Parameters.AddWithValue("@DescriptionOfPost", p1.DescriptionOfPost);
+                        myCommand.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
+                        myCommand.Parameters.AddWithValue("@UpdatedDate", DateTime.Now);
+                        myCommand.Parameters.AddWithValue("@LikesCount", 0);
+                        myCommand.Parameters.AddWithValue("@HeartCount", 0);
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myCon.Close();
+                    }
                 }
+               
             }
-            return new JsonResult("Posted Successfully");
+            catch(Exception)
+            {
+                return BadRequest();
+            }
+             return Ok("Posted Successfully");
         }
         [Route("UpdatePost")]
         [HttpPut]
-        public JsonResult UpdatePost( Post p1)
+        public IActionResult UpdatePost(Post p1)
         {
-            string query = @"
+            try
+            {
+                string query = @"
                            update dbo.Post
                            set PostTittle= @PostTittle,
                               
                                DescriptionOfPost=@DescriptionOfPost
-
                             where PostID=@PostID
                             ";
 
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                DataTable table = new DataTable();
+                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
+                SqlDataReader myReader;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
                 {
-                    myCommand.Parameters.AddWithValue("@PostID",p1.PostID);
-                    myCommand.Parameters.AddWithValue("@PostTittle", p1.PostTittle);
-                    myCommand.Parameters.AddWithValue("@DescriptionofPost", p1.DescriptionOfPost);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
+                    myCon.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@PostID", p1.PostID);
+                        myCommand.Parameters.AddWithValue("@PostTittle", p1.PostTittle);
+                        myCommand.Parameters.AddWithValue("@DescriptionofPost", p1.DescriptionOfPost);
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myCon.Close();
+                    }
                 }
-            }
 
-            return new JsonResult("Post Updated Successfully");
+                
+            }
+            catch(Exception)
+            {
+                return BadRequest();
+            }
+            return Ok("Post Updated Successfully");
         }
-       
+
+        
+
+
 
     }
+
 }
