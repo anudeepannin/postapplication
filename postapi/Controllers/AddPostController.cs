@@ -140,8 +140,82 @@ namespace postapi.Controllers
             return Ok("Post Updated Successfully");
         }
 
-        
+        [Route("POSTLIKE")]
+        [HttpPut]
+        public IActionResult POSTLIKE(Post p1)
+        {
+            try
+            {
+                string query = @"
+                           update dbo.Post
+                           set LikesCount= @LikesCount
+                            where PostID=@PostID
+                            ";
 
+                DataTable table = new DataTable();
+                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
+                SqlDataReader myReader;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@PostID", p1.PostID);
+                        myCommand.Parameters.AddWithValue("@LikesCount", p1.LikesCount);
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myCon.Close();
+                    }
+                }
+            }
+            catch(Exception)
+            {
+                return BadRequest();
+            }
+            return Ok("LikesCount Updated Successfully");
+        }
+
+
+
+
+
+        [Route("POSTHEART")]
+        [HttpPut]
+        public IActionResult POSTHEART(Post p1)
+        {
+            try
+            {
+                string query = @"
+                           update dbo.Post
+                           set HeartCount= @HeartCount
+                            where PostID=@PostID
+                            ";
+
+                DataTable table = new DataTable();
+                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
+                SqlDataReader myReader;
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    myCon.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@PostID", p1.PostID);
+                        myCommand.Parameters.AddWithValue("@HeartCount", p1.HeartCount);
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myCon.Close();
+                    }
+                }
+            }
+            catch(Exception)
+            {
+                return BadRequest();
+            }
+
+            return Ok(" HeartsCount Updated Successfully");
+        }
 
 
     }
