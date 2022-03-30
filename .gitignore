@@ -14,8 +14,10 @@
 # dotnet ignores
 /postapi/obj
 /postapi/bin
-
+/XunitTestingForApi/obj
+/XunitTestingForApi/bin
 # misc
+.vs
 .DS_Store
 .env.local
 .env.development.local
