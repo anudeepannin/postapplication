@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using postapi.Model;
+using postapi.Repository;
 
 namespace postapi.Controllers
 {
@@ -16,88 +17,40 @@ namespace postapi.Controllers
 
     public class AddPostController : ControllerBase
     {
-
-        private readonly IConfiguration _configuration;
-        public AddPostController(IConfiguration configuration)
+        private readonly IAddPostRepository _AddPostRepository;
+        public AddPostController( IAddPostRepository addPostRepository)
         {
-            _configuration = configuration;
+            _AddPostRepository = addPostRepository;
         }
         [Route("GetPosts")]
-        [HttpGet]
+        [HttpGet]   
         public IActionResult GetPosts()
         {
-            DataTable table = new DataTable();
             try
             {
-                string query = @"
-             select  PostID,PostTittle,DescriptionOfPost, CreatedDate, UpdatedDate,LikesCount, HeartCount
-            from
-            dbo.Post
-            ";
-                
-                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
-                SqlDataReader myReader;
-                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-                {
-                    myCon.Open();
-                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                    {
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-                        myCon.Close();
-                    }
-                }
-
-               
+                var response = _AddPostRepository.GetPosts();
+                return Ok(response);
             }
-            catch(Exception)
+            catch(Exception )
             {
-                return BadRequest();
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-            return Ok(table);
         }
         [Route("CreatePost")]
         [HttpPost]
         public IActionResult CreatePost(Post p1)
         {
+
             try
             {
-
-
-                string query = @"
-                           insert into dbo.Post
-                           values (@PostTittle,@DescriptionOfPost, @CreatedDate, @UpdatedDate,@LikesCount,@HeartCount)
-                            ";
-
-                DataTable table = new DataTable();
-                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
-                SqlDataReader myReader;
-                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-                {
-                    myCon.Open();
-                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                    {
-
-                        myCommand.Parameters.AddWithValue("@PostTittle", p1.PostTittle);
-                        myCommand.Parameters.AddWithValue("@DescriptionOfPost", p1.DescriptionOfPost);
-                        myCommand.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
-                        myCommand.Parameters.AddWithValue("@UpdatedDate", DateTime.Now);
-                        myCommand.Parameters.AddWithValue("@LikesCount", 0);
-                        myCommand.Parameters.AddWithValue("@HeartCount", 0);
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-                        myCon.Close();
-                    }
-                }
-               
+                 _AddPostRepository.CreatePost(p1);
             }
-            catch(Exception)
+            catch (Exception)
             {
-                return BadRequest();
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-             return Ok("Posted Successfully");
+            return Ok("Posted Successfully");
+
         }
         [Route("UpdatePost")]
         [HttpPut]
@@ -105,32 +58,8 @@ namespace postapi.Controllers
         {
             try
             {
-                string query = @"
-                           update dbo.Post
-                           set PostTittle= @PostTittle,
-                              
-                               DescriptionOfPost=@DescriptionOfPost
-                            where PostID=@PostID
-                            ";
 
-                DataTable table = new DataTable();
-                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
-                SqlDataReader myReader;
-                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-                {
-                    myCon.Open();
-                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                    {
-                        myCommand.Parameters.AddWithValue("@PostID", p1.PostID);
-                        myCommand.Parameters.AddWithValue("@PostTittle", p1.PostTittle);
-                        myCommand.Parameters.AddWithValue("@DescriptionofPost", p1.DescriptionOfPost);
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-                        myCon.Close();
-                    }
-                }
-
+                _AddPostRepository.UpdatePost(p1);
                 
             }
             catch(Exception)
@@ -146,28 +75,7 @@ namespace postapi.Controllers
         {
             try
             {
-                string query = @"
-                           update dbo.Post
-                           set LikesCount= @LikesCount
-                            where PostID=@PostID
-                            ";
-
-                DataTable table = new DataTable();
-                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
-                SqlDataReader myReader;
-                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-                {
-                    myCon.Open();
-                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                    {
-                        myCommand.Parameters.AddWithValue("@PostID", p1.PostID);
-                        myCommand.Parameters.AddWithValue("@LikesCount", p1.LikesCount);
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-                        myCon.Close();
-                    }
-                }
+                _AddPostRepository.POSTLIKE(p1);
             }
             catch(Exception)
             {
@@ -186,28 +94,7 @@ namespace postapi.Controllers
         {
             try
             {
-                string query = @"
-                           update dbo.Post
-                           set HeartCount= @HeartCount
-                            where PostID=@PostID
-                            ";
-
-                DataTable table = new DataTable();
-                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
-                SqlDataReader myReader;
-                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-                {
-                    myCon.Open();
-                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                    {
-                        myCommand.Parameters.AddWithValue("@PostID", p1.PostID);
-                        myCommand.Parameters.AddWithValue("@HeartCount", p1.HeartCount);
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-                        myCon.Close();
-                    }
-                }
+                _AddPostRepository.POSTHEART(p1);
             }
             catch(Exception)
             {

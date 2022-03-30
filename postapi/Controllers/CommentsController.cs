@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using postapi.Model;
+using postapi.Repository;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -15,47 +16,28 @@ namespace postapi.Controllers
     {
 
 
-        private readonly IConfiguration _configuration;
-        private readonly IWebHostEnvironment _env;
-        public CommentsController(IConfiguration configuration, IWebHostEnvironment env)
+        private readonly ICommentsRepository _CommentsRepository;
+        public CommentsController (ICommentsRepository CommentsRepository)
         {
-            _configuration = configuration;
-            _env = env;
+            _CommentsRepository =CommentsRepository;
         }
+        
 
-        [Route("GetComments")]
+        [Route("GetComments/{PostId}")]
         [HttpGet]
-        public IActionResult CommentsGet()
+        public IActionResult CommentsGet(int PostId)
         {
-            DataTable table = new DataTable();
             try
             {
+                var response = _CommentsRepository.CommentsGet( PostId);
+                return Ok(response);
 
-                string query = @"
-                            select CommentID ,CommentText,PostID, CommentsCreatedDate, CommentsUpdatedDate
-                            from
-                            dbo.Comments
-                            ";
-
-                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
-                SqlDataReader myReader;
-                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-                {
-                    myCon.Open();
-                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                    {
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-                        myCon.Close();
-                    }
-                }
             }
             catch(Exception)
             {
                 return BadRequest();
             }
-            return Ok(table);
+           
         }
 
         [Route("CreateComment")]
@@ -64,32 +46,8 @@ namespace postapi.Controllers
         {
             try
             {
+                _CommentsRepository.CreateComment(c1);
 
-                string query = @"
-                           insert into dbo.Comments
-                           ( CommentText,PostID,CommentsCreatedDate,CommentsupdatedDate)
-                           values (@CommentText,@PostID,@CommentsCreatedDate,@CommentsUpdatedDate)
-                           ";
-
-                DataTable table = new DataTable();
-                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
-                SqlDataReader myReader;
-                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-                {
-                    myCon.Open();
-                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                    {
-
-                        myCommand.Parameters.AddWithValue("@CommentText", c1.CommentText);
-                        myCommand.Parameters.AddWithValue("@PostID", c1.PostID);
-                        myCommand.Parameters.AddWithValue("@CommentsCreatedDate", DateTime.Now);
-                        myCommand.Parameters.AddWithValue("@CommentsUpdatedDate", DateTime.Now);
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-                        myCon.Close();
-                    }
-                }
             }
             catch(Exception)
             {
@@ -105,28 +63,7 @@ namespace postapi.Controllers
         {
             try
             {
-                string query = @"
-                           update dbo.Comments
-                           set CommentText=@CommentText 
-                            where CommentID = @CommentID
-                            ";
-
-                DataTable table = new DataTable();
-                string sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
-                SqlDataReader myReader;
-                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-                {
-                    myCon.Open();
-                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                    {
-                        myCommand.Parameters.AddWithValue("@CommentID", c1.CommentID);
-                        myCommand.Parameters.AddWithValue("@CommentText", c1.CommentText);
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-                        myCon.Close();
-                    }
-                }
+                _CommentsRepository.UpdateComment(c1);
             }
             catch(Exception)
             {
