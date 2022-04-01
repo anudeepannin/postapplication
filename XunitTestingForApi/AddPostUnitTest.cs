@@ -13,23 +13,15 @@ namespace XunitTestingForApi
 {
     public class AddPostUnitTest1
     {
-
         [Fact]
         public void GetPosts_Returns_All_posts()
         {
-
-            // Arrange
             var mockRepo = new Mock<IAddPostRepository>();
-
             mockRepo.Setup(repo => repo.GetPosts())
             .Returns(GetTestPost());
-
             var controller = new AddPostController(mockRepo.Object);
-
             var result = controller.GetPosts();
             var objectResult = (ObjectResult)result;
-
-
             Assert.NotNull(result);
             Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
             Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)objectResult.StatusCode);
@@ -47,53 +39,34 @@ namespace XunitTestingForApi
                 });
         }
 
-
         [Fact]
         public void CreatePost_Returns_Post()
         {
-
-
-            // Arrange
             var mockRepo = new Mock<IAddPostRepository>();
-
             var post = new Post()
             {
                 PostTittle = "Test post",
                 DescriptionOfPost = "description"
             };
-
             mockRepo.Setup(repo => repo.CreatePost(post));
-
             var controller = new AddPostController(mockRepo.Object);
-
             var result = controller.CreatePost(post);
             var objectResult = (ObjectResult)result;
-
-
             Assert.NotNull(result);
             Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
             Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)objectResult.StatusCode);
-
-
-
         }
 
         [Fact]
         public void UpdatePost_Returns_Post()
         {
-
-
-            // Arrange
             var mockRepo = new Mock<IAddPostRepository>();
-
             var post = new Post()
             {
                 PostTittle = "Test post",
                 DescriptionOfPost = "description"
             };
-
             mockRepo.Setup(repo => repo.UpdatePost(post));
-
             var controller = new AddPostController(mockRepo.Object);
 
             var result = controller.UpdatePost(post);
@@ -103,25 +76,16 @@ namespace XunitTestingForApi
             Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)objectResult.StatusCode);
         }
 
-
         [Fact]
         public void UpdatePostLikes_Returns_PostLikes()
         {
-
-
-            // Arrange
             var mockRepo = new Mock<IAddPostRepository>();
-
             var post = new Post()
             {
                 LikesCount = 1
-
             };
-
             mockRepo.Setup(repo => repo.POSTLIKE(post));
-
             var controller = new AddPostController(mockRepo.Object);
-
             var result = controller.POSTLIKE(post);
             var objectResult = (ObjectResult)result;
             Assert.NotNull(result);
@@ -129,25 +93,16 @@ namespace XunitTestingForApi
             Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)objectResult.StatusCode);
         }
 
-
         [Fact]
         public void UpdatePostHearts_Returns_PostHearts()
         {
-
-
-            // Arrange
             var mockRepo = new Mock<IAddPostRepository>();
-
             var post = new Post()
             {
                 HeartCount = 1
-
             };
-
             mockRepo.Setup(repo => repo.POSTHEART(post));
-
             var controller = new AddPostController(mockRepo.Object);
-
             var result = controller.POSTHEART(post);
             var objectResult = (ObjectResult)result;
             Assert.NotNull(result);
@@ -168,10 +123,8 @@ namespace XunitTestingForApi
                 UpdatedDate = Convert.ToDateTime("23-01-2021"),
                 LikesCount = 1,
                 HeartCount = 1
-
             });
             return posts;
         }
-
     }
 }
