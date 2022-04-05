@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using postapi.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,10 @@ namespace postapi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "postapi", Version = "v1" });
             });
+
+            services.AddScoped<IAddPostRepository, AddPostRepository>();
+            services.AddScoped<ICommentsRepository, CommentsRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
