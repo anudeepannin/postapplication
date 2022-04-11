@@ -12,10 +12,10 @@
 /build
 
 # dotnet ignores
-/postapi/obj
-/postapi/bin
-/XunitTestingForApi/obj
-/XunitTestingForApi/bin
+/PostServerApi/obj
+/PostServerApi/bin
+/PostServerApiTesting/obj
+/PostServerApiTesting/bin
 
 # misc
 .vs
