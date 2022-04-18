@@ -1,4 +1,4 @@
-﻿using PostServerApi.Model;
+﻿using PostServerApi.Models;
 using PostServerApi.Repository;
 using System;
 using System.Collections.Generic;
@@ -15,61 +15,25 @@ namespace PostServerApi.Services
         }
         public  Task<List<Post>> GetPostData()
         {
-            try 
-            {
-               
-                return _AddPostRepository.GetPosts();
-            }
-            catch(Exception )
-            {
-                 throw new Exception(" Post is Not Found");
-            }
+            return _AddPostRepository.GetPosts();
         }
-        public Task InsertPostData(Post p1)
+        public Task<Post> InsertPostData(Post p1)
         {
-            try
-            {
-                return _AddPostRepository.CreatePost(p1);
-            }
-            catch (Exception)
-            {
-                throw new Exception(" This method is not implemented");
-            }
+            return _AddPostRepository.CreatePost(p1);
         }
 
-        public Task UpdatepostData(Post p1)
+        public Task<Post> UpdatepostData(int id,Post p1)
         {
-            try
-            {
-                return _AddPostRepository.UpdatePost(p1);
-            }
-            catch (Exception)
-            {
-                throw new Exception(" This method is not implemented");
-            }
+            return _AddPostRepository.UpdatePost(id,p1);
         }
 
-        public Task UpdateLike(Post p1)
+        public Task<Post> UpdateLike(int id,Post p1)
         {
-            try
-            {
-                return _AddPostRepository.POSTLIKE(p1);
-            }
-            catch (Exception)
-            {
-                throw new Exception(" This method is not implemented");
-            }
+            return _AddPostRepository.PostLike(id,p1);
         }
-        public Task UpdateHeart(Post p1)
+        public Task<Post> UpdateHeart(int id,Post p1)
         {
-            try
-            {
-                return _AddPostRepository.POSTHEART(p1);
-            }
-            catch (Exception)
-            {
-                throw new Exception(" This method is not implemented");
-            }
+            return _AddPostRepository.PostHeart(id,p1);
         }
     }
 }

@@ -1,14 +1,16 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using PostServerApi.Models;
 using PostServerApi.Repository;
 using PostServerApi.Services;
 
-namespace postapi
+namespace PostServerApi
 {
     public class Startup
     {
@@ -27,7 +29,7 @@ namespace postapi
                 c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             });
             //JSON Serializer
-            services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore).AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+           
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -37,6 +39,8 @@ namespace postapi
             services.AddScoped<ICommentsRepository, CommentsRepository>();
             services.AddScoped<IAddPostServices, AddPostServices>();
             services.AddScoped<ICommentsServices, CommentsServices>();
+
+            services.AddDbContext<bhavnaContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

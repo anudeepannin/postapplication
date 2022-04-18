@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using PostServerApi.Controllers;
-using PostServerApi.Model;
+using PostServerApi.Models;
 using PostServerApi.Services;
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace XunitTestingForApi
             mockRepo.Setup(repo => repo.GetComments(id))
             .Returns(GetTestComments());
             var controller = new CommentsController(mockRepo.Object);
-            var result =  await controller.CommentsGet(id);
+            var result = await controller.CommentsGet(id);
             var objectResult = (ObjectResult)result;
             Assert.NotNull(result);
             Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
@@ -30,8 +30,8 @@ namespace XunitTestingForApi
             Assert.Collection((List<Comment>)objectResult.Value,
                 item =>
                 {
-                    Assert.Equal(1, item.CommentID);
-                    Assert.Equal(1, item.PostID);
+                    Assert.Equal(1, item.CommentId);
+                    Assert.Equal(1, item.PostId);
                     Assert.Equal("Test Comment", item.CommentText);
                     Assert.Equal(Convert.ToDateTime("22-01-2021"), item.CommentsCreatedDate);
                     Assert.Equal(Convert.ToDateTime("23-01-2021"), item.CommentsUpdatedDate);
@@ -39,7 +39,7 @@ namespace XunitTestingForApi
         }
 
         [Fact]
-        public  async void CreateComments_Returns_Comments()
+        public async void CreateComments_Returns_Comments()
         {
             var mockRepo = new Mock<ICommentsServices>();
             var Comment = new Comment()
@@ -48,7 +48,7 @@ namespace XunitTestingForApi
             };
             mockRepo.Setup(repo => repo.InsertComments(Comment));
             var controller = new CommentsController(mockRepo.Object);
-            var result =  await controller.CreateComment(Comment);
+            var result = await controller.CreateComment(Comment);
             var objectResult = (ObjectResult)result;
             Assert.NotNull(result);
             Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
@@ -63,9 +63,9 @@ namespace XunitTestingForApi
             {
                 CommentText = "Testcomments"
             };
-            mockRepo.Setup(repo => repo.UpdateCommentsdata(Comment));
+            mockRepo.Setup(repo => repo.UpdateCommentsData(1,Comment));
             var controller = new CommentsController(mockRepo.Object);
-            var result =  await controller .UpdateComment(Comment);
+            var result = await controller.UpdateComment(1,Comment);
             var objectResult = (ObjectResult)result;
             Assert.NotNull(result);
             Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
@@ -76,12 +76,11 @@ namespace XunitTestingForApi
             List<Comment> Comments = new List<Comment>();
             Comments.Add(new Comment()
             {
-                PostID = 1,
-                CommentID = 1,
+                PostId = 1,
+                CommentId = 1,
                 CommentText = "Test Comment",
                 CommentsCreatedDate = Convert.ToDateTime("22-01-2021"),
                 CommentsUpdatedDate = Convert.ToDateTime("23-01-2021")
-
             });
             return Task.FromResult(Comments);
         }

@@ -1,4 +1,4 @@
-﻿using PostServerApi.Model;
+﻿using PostServerApi.Models;
 using PostServerApi.Repository;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PostServerApi.Services
 {
-    public class CommentsServices:ICommentsServices
+    public class CommentsServices : ICommentsServices
     {
         private readonly ICommentsRepository _CommentsRepository;
         public CommentsServices(ICommentsRepository CommentsRepository)
@@ -15,36 +15,15 @@ namespace PostServerApi.Services
         }
         public Task<List<Comment>> GetComments(int PostId)
         {
-            try
-            {
-                return _CommentsRepository.CommentsGet(PostId);
-            }
-            catch (Exception)
-            {
-                throw new Exception(" This method is not implemented");
-            }
+           return _CommentsRepository.CommentsGet(PostId);
         }
-        public Task InsertComments(Comment c1)
+        public Task<Comment> InsertComments(Comment c1)
         {
-            try
-            {
-                return _CommentsRepository.CreateComment(c1);
-            }
-            catch (Exception)
-            {
-                throw new Exception(" This method is not implemented");
-            }
+            return _CommentsRepository.CreateComment(c1);
         }
-        public Task UpdateCommentsdata(Comment c1)
+        public Task<Comment> UpdateCommentsData( int id,Comment c1)
         {
-            try
-            {
-                return _CommentsRepository.UpdateComment(c1);
-            }
-            catch (Exception )
-            {
-                throw new Exception("This method is not implemented");
-            }
+            return _CommentsRepository.UpdateComment(id,c1);
         }
 
     }

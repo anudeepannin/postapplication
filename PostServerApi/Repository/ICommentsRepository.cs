@@ -1,4 +1,4 @@
-﻿using PostServerApi.Model;
+﻿using PostServerApi.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,8 +6,8 @@ namespace PostServerApi.Repository
 {
     public interface ICommentsRepository
     {
-        Task<List<Comment>> CommentsGet(int PostId);
-        Task CreateComment(Comment c1);
-        Task UpdateComment(Comment c1);
+        Task<List<Comment>> CommentsGet(int id);
+        Task<Comment> CreateComment(Comment c1);
+        Task<Comment> UpdateComment(int id,Comment c1);
     }
 }

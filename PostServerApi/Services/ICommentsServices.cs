@@ -1,15 +1,13 @@
-﻿using PostServerApi.Model;
-using System;
+﻿using PostServerApi.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PostServerApi.Services
 {
-  public  interface ICommentsServices
+    public interface ICommentsServices
     {
         Task<List<Comment>> GetComments(int PostId);
-        Task InsertComments(Comment c1);
-        Task UpdateCommentsdata(Comment c1);
+        Task<Comment> InsertComments(Comment c1);
+        Task<Comment> UpdateCommentsData(int id,Comment c1);
     }
 }

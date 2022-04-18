@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PostServerApi.Model;
+using PostServerApi.Constants;
+using PostServerApi.Models;
 using PostServerApi.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace PostServerApi.Controllers
@@ -10,27 +12,27 @@ namespace PostServerApi.Controllers
     public class CommentsController : ControllerBase
     {
         private readonly ICommentsServices _CommentsServices;
-        public CommentsController (ICommentsServices CommentsServices)
+        public CommentsController(ICommentsServices CommentsServices)
         {
             _CommentsServices = CommentsServices;
         }
-        
+
         [Route("GetComments/{PostId}")]
         [HttpGet]
         public async Task<IActionResult> CommentsGet(int PostId)
         {
-                var response = await _CommentsServices.GetComments(PostId);
-                return Ok(response);
+            var response = await _CommentsServices.GetComments(PostId);
+            return Ok(response);
         }
 
         [Route("CreateComment")]
         [HttpPost]
         public async Task<IActionResult> CreateComment(Comment c1)
         {
-            if (c1 !=null &&  c1.CommentText!=null && c1.CommentText!=" ")
+            if (!String.IsNullOrEmpty(c1.CommentText))
             {
                 await _CommentsServices.InsertComments(c1);
-                return Ok("Comments Added Successfully");
+                return Ok(Constant.CommentSucces);
             }
             else
             {
@@ -38,14 +40,14 @@ namespace PostServerApi.Controllers
             }
         }
 
-        [Route("UpdateComment")]
+        [Route("UpdateComment/{Id}")]
         [HttpPut]
-        public async Task<IActionResult> UpdateComment(Comment c1)
+        public async Task<IActionResult> UpdateComment(int id, Comment c1)
         {
-            if (c1 != null )
+            if (c1 != null)
             {
-                await _CommentsServices.UpdateCommentsdata(c1);
-                return Ok("Comments  Updated Successfully");
+                await _CommentsServices.UpdateCommentsData(id, c1);
+                return Ok(Constant.CommentUpdate);
             }
             else
             {
@@ -57,4 +59,4 @@ namespace PostServerApi.Controllers
 
 
 
-   
+

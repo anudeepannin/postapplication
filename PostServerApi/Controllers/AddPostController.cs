@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PostServerApi.Services;
-using PostServerApi.Model;
 using System.Threading.Tasks;
+using PostServerApi.Models;
+using System;
+using PostServerApi.Constants;
 
 namespace PostServerApi.Controllers
 {
@@ -27,10 +29,10 @@ namespace PostServerApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePost(Post p1)
         {
-            if (p1 != null && p1.PostTittle!=null && p1.DescriptionOfPost !=null && p1.DescriptionOfPost!=" " && p1.PostTittle!=" ")
+            if (!String.IsNullOrEmpty(p1.PostTittle)&& !String.IsNullOrEmpty(p1.DescriptionOfPost))
             {
                 await _AddPostServices.InsertPostData(p1);
-                return Ok("Posted Successfully");
+                return Ok(Constant.PostSucces);
             }
             else
             {
@@ -38,14 +40,14 @@ namespace PostServerApi.Controllers
             }
         }
 
-        [Route("UpdatePost")]
+        [Route("UpdatePost/{id}")]
         [HttpPut]
-        public async Task<IActionResult> UpdatePost(Post p1)
+        public async Task<IActionResult> UpdatePost(int id,Post p1)
         {
-            if (p1 != null )
+            if (p1 != null)
             {
-                await _AddPostServices.UpdatepostData(p1);
-                return Ok("Post Updated Successfully");
+                await _AddPostServices.UpdatepostData(id,p1);
+                return Ok(Constant.PostUpdate);
             }
             else
             {
@@ -53,14 +55,14 @@ namespace PostServerApi.Controllers
             }
         }
 
-        [Route("POSTLIKE")]
+        [Route("PostLike/{id}")]
         [HttpPut]
-        public async Task<IActionResult> POSTLIKE(Post p1)
+        public async Task<IActionResult> PostLike(int id,Post p1)
         {
             if (p1 != null )
             {
-                await _AddPostServices.UpdateLike(p1);
-                return Ok("LikesCount Updated Successfully");
+                await _AddPostServices.UpdateLike(id,p1);
+                return Ok(Constant.PostLike);
             }
             else
             {
@@ -68,14 +70,14 @@ namespace PostServerApi.Controllers
             }
         }
 
-        [Route("POSTHEART")]
+        [Route("PostHeart/{id}")]
         [HttpPut]
-        public async Task<IActionResult> POSTHEART(Post p1)
+        public async Task<IActionResult> PostHeart(int id,Post p1)
         {
             if (p1 != null )
             {
-                await _AddPostServices.UpdateHeart(p1);
-                return Ok(" HeartsCount Updated Successfully");
+                await _AddPostServices.UpdateHeart(id, p1);
+                return Ok(Constant.PostHeart);
             }
             else
             {
