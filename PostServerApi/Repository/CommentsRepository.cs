@@ -55,12 +55,9 @@ namespace PostServerApi.Repository
                     commentData.CommentsUpdatedDate = DateTime.Now;
                     commentData.PostId = c1.PostId;
                     await context.SaveChangesAsync();
-                    return await context.Comments.FirstOrDefaultAsync(x => x.CommentId == id);
+                    return commentData;
                 }
-                else
-                {
-                    throw new ArgumentException(nameof(id));
-                }
+                return null;
             }
             catch (Exception ex)
             {

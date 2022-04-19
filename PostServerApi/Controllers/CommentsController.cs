@@ -46,7 +46,9 @@ namespace PostServerApi.Controllers
         {
             if (c1 != null)
             {
-                await _CommentsServices.UpdateCommentsData(id, c1);
+               var updateComment= await _CommentsServices.UpdateCommentsData(id, c1);
+                if (updateComment == null)
+                    return NotFound();
                 return Ok(AppConstant.CommentUpdate);
             }
             else

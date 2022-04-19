@@ -54,12 +54,9 @@ namespace PostServerApi.Repository
                     postData.DescriptionOfPost = p1.DescriptionOfPost;
                     postData.UpdatedDate = DateTime.Now;
                     await context.SaveChangesAsync();
-                    return await context.Posts.FirstOrDefaultAsync(x => x.PostId == id);
+                    return postData;
                 }
-                else
-                {
-                    throw new ArgumentException(nameof(id));
-                }
+                return null;
             }
             catch (Exception ex)
             {
@@ -76,12 +73,9 @@ namespace PostServerApi.Repository
                 {
                     postData.LikesCount = p1.LikesCount;
                     await context.SaveChangesAsync();
-                    return await context.Posts.FirstOrDefaultAsync(x => x.PostId == id);
+                    return postData;
                 }
-                else
-                {
-                    throw new ArgumentException(nameof(id));
-                }
+                return null;
 
             }
             catch (Exception ex)
@@ -98,12 +92,9 @@ namespace PostServerApi.Repository
                 {
                     postData.HeartCount = p1.HeartCount;
                     await context.SaveChangesAsync();
-                    return await context.Posts.FirstOrDefaultAsync(x => x.PostId == id);
+                    return postData;
                 }
-                else
-                {
-                    throw new ArgumentException(nameof(id));
-                }
+                return null;
             }
             catch (Exception ex)
             {
