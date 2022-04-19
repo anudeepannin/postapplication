@@ -22,9 +22,9 @@ namespace PostServerApi.Repository
                 var CommentList = await context.Comments.Where(s => s.PostId == PostId).ToListAsync();
                 return CommentList;
             }
-            catch (Exception)
+            catch (Exception ex) 
             {
-                throw new Exception(" This method is not implemented");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -38,9 +38,9 @@ namespace PostServerApi.Repository
                 await context.SaveChangesAsync();
                 return c1;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception(" This method is not implemented");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -48,16 +48,23 @@ namespace PostServerApi.Repository
         {
             try
             {
-                var update = await context.Comments.FirstAsync(x => x.CommentId == id);
-                update.CommentText = c1.CommentText;
-                update.CommentsUpdatedDate = DateTime.Now;
-                update.PostId = c1.PostId;
-                await context.SaveChangesAsync();
-                return await context.Comments.FirstAsync(x => x.CommentId == id);
+                var commentData = await context.Comments.FirstOrDefaultAsync(x => x.CommentId == id);
+                if (commentData != null)
+                {
+                    commentData.CommentText = c1.CommentText;
+                    commentData.CommentsUpdatedDate = DateTime.Now;
+                    commentData.PostId = c1.PostId;
+                    await context.SaveChangesAsync();
+                    return await context.Comments.FirstOrDefaultAsync(x => x.CommentId == id);
+                }
+                else
+                {
+                    throw new ArgumentException(nameof(id));
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception(" This method is not implemented");
+                throw new Exception (ex.Message);
             }
         }
     }

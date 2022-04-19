@@ -32,7 +32,7 @@ namespace PostServerApi.Controllers
             if (!String.IsNullOrEmpty(p1.PostTittle)&& !String.IsNullOrEmpty(p1.DescriptionOfPost))
             {
                 await _AddPostServices.InsertPostData(p1);
-                return Ok(Constant.PostSucces);
+                return Ok(AppConstant.PostSucces);
             }
             else
             {
@@ -47,7 +47,7 @@ namespace PostServerApi.Controllers
             if (p1 != null)
             {
                 await _AddPostServices.UpdatepostData(id,p1);
-                return Ok(Constant.PostUpdate);
+                return Ok(AppConstant.PostUpdate);
             }
             else
             {
@@ -62,7 +62,7 @@ namespace PostServerApi.Controllers
             if (p1 != null )
             {
                 await _AddPostServices.UpdateLike(id,p1);
-                return Ok(Constant.PostLike);
+                return Ok(AppConstant.PostLike);
             }
             else
             {
@@ -77,7 +77,7 @@ namespace PostServerApi.Controllers
             if (p1 != null )
             {
                 await _AddPostServices.UpdateHeart(id, p1);
-                return Ok(Constant.PostHeart);
+                return Ok(AppConstant.PostHeart);
             }
             else
             {

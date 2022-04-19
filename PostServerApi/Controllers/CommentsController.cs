@@ -32,7 +32,7 @@ namespace PostServerApi.Controllers
             if (!String.IsNullOrEmpty(c1.CommentText))
             {
                 await _CommentsServices.InsertComments(c1);
-                return Ok(Constant.CommentSucces);
+                return Ok(AppConstant.CommentSucces);
             }
             else
             {
@@ -47,7 +47,7 @@ namespace PostServerApi.Controllers
             if (c1 != null)
             {
                 await _CommentsServices.UpdateCommentsData(id, c1);
-                return Ok(Constant.CommentUpdate);
+                return Ok(AppConstant.CommentUpdate);
             }
             else
             {

@@ -19,9 +19,9 @@ namespace PostServerApi.Repository
             {
                 return await context.Posts.ToListAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception(" This method is not implemented");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -37,9 +37,9 @@ namespace PostServerApi.Repository
                 await context.SaveChangesAsync();
                 return p1;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception(" This method is not implemented");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -47,16 +47,23 @@ namespace PostServerApi.Repository
         {
             try
             {
-                var update = await context.Posts.FirstAsync(x => x.PostId == id);
-                update.PostTittle = p1.PostTittle;
-                update.DescriptionOfPost = p1.DescriptionOfPost;
-                update.UpdatedDate = DateTime.Now;
-                await context.SaveChangesAsync();
-                return await context.Posts.FirstAsync(x => x.PostId == id);
+                var postData = await context.Posts.FirstOrDefaultAsync(x => x.PostId == id);
+                if (postData != null)
+                {
+                    postData.PostTittle = p1.PostTittle;
+                    postData.DescriptionOfPost = p1.DescriptionOfPost;
+                    postData.UpdatedDate = DateTime.Now;
+                    await context.SaveChangesAsync();
+                    return await context.Posts.FirstOrDefaultAsync(x => x.PostId == id);
+                }
+                else
+                {
+                    throw new ArgumentException(nameof(id));
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception(" This method is not implemented");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -64,28 +71,43 @@ namespace PostServerApi.Repository
         {
             try
             {
-                var update = await context.Posts.FirstAsync(x => x.PostId == id);
-                update.LikesCount = p1.LikesCount;
-                await context.SaveChangesAsync();
-                return await context.Posts.FirstAsync(x => x.PostId == id);
+                var postData = await context.Posts.FirstOrDefaultAsync(x => x.PostId == id);
+                if (postData != null)
+                {
+                    postData.LikesCount = p1.LikesCount;
+                    await context.SaveChangesAsync();
+                    return await context.Posts.FirstOrDefaultAsync(x => x.PostId == id);
+                }
+                else
+                {
+                    throw new ArgumentException(nameof(id));
+                }
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception(" This method is not implemented");
+                throw new Exception(ex.Message);
             }
         }
         public async Task<Post> PostHeart(int id, Post p1)
         {
             try
             {
-                var update = await context.Posts.FirstAsync(x => x.PostId == id);
-                update.HeartCount = p1.HeartCount;
-                await context.SaveChangesAsync();
-                return await context.Posts.FirstAsync(x => x.PostId == id);
+                var postData = await context.Posts.FirstOrDefaultAsync(x => x.PostId == id);
+                if (postData != null)
+                {
+                    postData.HeartCount = p1.HeartCount;
+                    await context.SaveChangesAsync();
+                    return await context.Posts.FirstOrDefaultAsync(x => x.PostId == id);
+                }
+                else
+                {
+                    throw new ArgumentException(nameof(id));
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception(" This method is not implemented");
+                throw new Exception(ex.Message);
             }
         }
     }
