@@ -1,7 +1,6 @@
 .App {
   text-align: center;
 }
-
 .margin-left{
   margin-left: 5px !important;
 }
@@ -9,14 +8,7 @@
   width: 20% !important; 
   margin-top:15px ;
   margin-bottom: 15px;
-
 }
-
-
-
-
-
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
