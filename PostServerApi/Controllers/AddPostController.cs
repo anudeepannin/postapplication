@@ -46,7 +46,10 @@ namespace PostServerApi.Controllers
         {
             if (p1 != null)
             {
-                await _AddPostServices.UpdatepostData(id,p1);
+
+                var updatedPost = await _AddPostServices.UpdatepostData(id,p1);
+                if (updatedPost == null)
+                    return NotFound();
                 return Ok(AppConstant.PostUpdate);
             }
             else
@@ -61,7 +64,9 @@ namespace PostServerApi.Controllers
         {
             if (p1 != null )
             {
-                await _AddPostServices.UpdateLike(id,p1);
+               var updateLike= await _AddPostServices.UpdateLike(id,p1);
+                if (updateLike == null)
+                    return NotFound();
                 return Ok(AppConstant.PostLike);
             }
             else
@@ -76,7 +81,9 @@ namespace PostServerApi.Controllers
         {
             if (p1 != null )
             {
-                await _AddPostServices.UpdateHeart(id, p1);
+              var updateHeart=  await _AddPostServices.UpdateHeart(id, p1);
+                if (updateHeart == null)
+                    return NotFound();
                 return Ok(AppConstant.PostHeart);
             }
             else
